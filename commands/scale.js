@@ -11,7 +11,7 @@ module.exports = {
   name: 'scale',
   description: '音階の情報を表示する',
   execute(message, args){
-    if (args.length === 0 || args.includes('-help')) {
+    if (args.length === 0 || args.includes('-help')) { //sends usage message
       message.channel.send(usageText);
       return;
     }
@@ -19,7 +19,8 @@ module.exports = {
     const key = args.shift();
     var note = key;
     var mode = 'major';
-    // Am becomes minor
+
+    // parses for a 'm' to make the chord scale minor
     if (key.endsWith('m')) {
       mode = 'minor';
       note = note.substring(0, note.length - 1)
@@ -27,14 +28,15 @@ module.exports = {
 
     if (args.includes('-mode')) {
       const commandMode = fuseScales.search(args[args.indexOf('-mode') + 1])[0].item;
-      if (commandMode === 'pentatonic') {
+      if (commandMode === 'pentatonic') { //super jank. changes major/minor pentatonic depending on the notes ending in 'm'
         mode = mode + commandMode;
       } else {
         mode = commandMode;
       }
     }
+
     var scaleKeyNote = teoria.note('c')
-    try {
+    try { //makes note and catches errors
       scaleKeyNote = teoria.note(note);
     } catch (error) {
       console.log(error);

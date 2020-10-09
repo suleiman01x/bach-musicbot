@@ -10,7 +10,7 @@ module.exports = {
       return message.reply(usageText);
     }
 
-    try {
+    try { //test for errors in making a chord object
       var chord = teoria.chord(args[0]);
     } catch (error) {
       return message.reply(`${args[0]}はコードと認識されません`);

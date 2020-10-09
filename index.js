@@ -18,6 +18,7 @@ client.on('ready', () => {
 client.on('message', message => {
   if (!message.content.startsWith(prefix)) return
 
+  //change flat to 'b'. maybe work on a better way
   var userInput = message.content.replace(/♭/g, 'b');
   var args = userInput.slice(prefix.length).trim().split(/ +/);
   var userCommand = args.shift().toLowerCase();
@@ -28,7 +29,7 @@ client.on('message', message => {
   }
 
   const command = client.commands.get(userCommand);
-
+  
   try {
     command.execute(message, args);
   } catch (error) {
