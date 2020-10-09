@@ -1,0 +1,23 @@
+{
+  "name": "bach_discord",
+  "version": "1.0.0",
+  "description": "Discord bot for music theory",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "fuse.js": "^6.4.1",
+    "teoria": "^2.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.10.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

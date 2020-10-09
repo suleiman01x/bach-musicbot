@@ -1,0 +1,52 @@
+{
+  "help": {
+    "embed": {
+      "title": "🎵音楽理論ヘルパー、Bach🎵",
+      "description": "`b!`で呼び出してください。以下が現在対応しているコマンドです。＊まだベータ段階です。これから機能がより追加されます＊\n\n`b!scale`音階についてのコマンド\n`b!chord`＊開発中＊\n\n不具合・バグ報告=> `suleiman_1#5585`\n[このbotをサーバーに招待](https://discord.com/oauth2/authorize?client_id=759103191035543613&scope=bot&permissions=117824)",
+      "footer": {
+        "text": "suleiman_1#5585制作"
+      }
+    }
+  },
+  "scale": {
+    "embed": {
+      "title": "Scale コマンド",
+      "description": "音階の情報を表示します。*今は音階の音しか表示しません。*",
+      "fields": [
+        {
+          "name": "利用方法：",
+          "value":"`b!scale <音階の根音(必須)> <オプション>`"
+        },
+        {
+          "name": "オプション",
+          "value": "`-mode` 音階の種類を変更する。なにも入れないと`major`"
+        },
+        {
+          "name": "音階の種類",
+          "value": "`major` メジャー\n`minor`マイナー\n`harmonicminor`ハーモニックマイナー\n`melodicminor`メロディックマイナー\n`blues`ブルーズ\n`pentatonic`五音音階（ペンタトニック）\n`ionian`イオニアン\n`dorian`ドリアン\n`phrygian`フリジアン\n`lydian`リディアン\n`mixolydian`ミクソリディアン\n`aeolian`エオリアン\n`locrian`ロクリアン\n`chromatic`半音階\n`wholetone`全音階"
+        },
+        {
+          "name": "使用例：",
+          "value": "`b!scale A -mode blues`\n`b!scale Fm`mをつけるとマイナー音階を表示\n`b!scale g -mode mixo`だいぶ適当でも認識する"
+        }
+      ],
+      "footer": "b!helpでBachのヘルプ表示"
+    }
+  },
+  "chord": {
+    "embed": {
+      "title": "Chord コマンド",
+      "description": "コードの情報を表示します。",
+      "fields": [
+        {
+          "name": "利用方法：",
+          "value": "b!chord <コード名>"
+        },
+        {
+          "name": "使用例：",
+          "value": "b!chord Ab#5b9"
+        }
+      ]
+    }
+  }
+}
