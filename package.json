@@ -9,6 +9,7 @@
   "dependencies": {
     "discord.js": "^12.3.1",
     "fuse.js": "^6.4.1",
+    "midi-writer-js": "^1.7.4",
     "teoria": "^2.5.0"
   },
   "devDependencies": {
