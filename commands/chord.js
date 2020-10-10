@@ -50,7 +50,7 @@ module.exports = {
       var hasMidi = true;
     }
 
-    console.log(`FILE NAME: ${chordName}`);
+
     message.channel.send(`${chordName}の音: ${capArray(chordNoteNames)}`);
     //send Midi file
     if (hasMidi) {message.channel.send({

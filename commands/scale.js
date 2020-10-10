@@ -13,7 +13,6 @@ function makeMidiTrack(teoriaNotes) {
   var track = new MidiWriter.Track();
   for (var note in teoriaNotes){ //converts teoria note to scientific. then adds note event to track
     var midiNote = teoriaNotes[note].scientific();
-    console.log(midiNote);
     track.addEvent(new MidiWriter.NoteEvent({
       pitch: midiNote,
       duration: '8'
