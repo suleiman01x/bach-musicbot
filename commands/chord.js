@@ -1,6 +1,6 @@
 const usageText = require('./usage.json').chord;
 const teoria = require('teoria');
-const {capArray} = require('../lib/musicFormatting');
+const {capArray, sendAndDelete} = require('../lib/musicFormatting');
 const MidiWriter = require('midi-writer-js');
 const fs = require('fs');
 
@@ -53,17 +53,6 @@ module.exports = {
 
     message.channel.send(`${chordName}の音: ${capArray(chordNoteNames)}`);
     //send Midi file
-    if (hasMidi) {message.channel.send({
-      files: [{
-        attachment: `./${chordName}.mid`,
-        name: `${chordName}.mid`
-        }]
-      })
-      .then(() => {
-        fs.unlink(`${chordName}.mid`, (err) => {
-          if(err) console.log(err)
-        });
-      });
-    }
+    if (hasMidi) sendAndDelete(message, `${chordName}.mid`);
   }
 }

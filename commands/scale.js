@@ -1,5 +1,5 @@
 const teoria = require('teoria');
-const {capArray, capitalize} = require('../lib/musicFormatting');
+const {capArray, capitalize, sendAndDelete} = require('../lib/musicFormatting');
 const Fuse = require('fuse.js');
 const usageText = require('./usage.json').scale;
 const MidiWriter = require('midi-writer-js');
@@ -72,17 +72,6 @@ module.exports = {
 
 
     message.channel.send(`${scaleName}: ${capArray(scaleNotes.simple())}`);
-    if (hasMidi) {message.channel.send({
-      files: [{
-        attachment: `./${scaleName}.mid`,
-        name: `${scaleName}.mid`
-        }]
-      })
-      .then(() => {
-        fs.unlink(`${scaleName}.mid`, (err) => {
-          if(err) console.log(err)
-        });
-      });
-    }
+    if (hasMidi) sendAndDelete(message, `${scaleName}.mid`);
   }
 }
