@@ -15,7 +15,7 @@ function makeMidiTrack(teoriaNotes) {
   for (var note in teoriaNotes) { //adds each note from 1
     var tempTrack = new MidiWriter.Track();
     tempTrack.addEvent(new MidiWriter.NoteEvent({
-      pitch: teoriaNotes[note].scientific().toString(),
+      pitch: teoriaNotes[note].scientific(),
       duration: '1'
     }))
 
