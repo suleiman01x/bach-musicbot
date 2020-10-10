@@ -2,25 +2,12 @@ const usageText = require('./usage.json').chord;
 const teoria = require('teoria');
 const {capArray, sendAndDelete} = require('../lib/musicFormatting');
 const MidiWriter = require('midi-writer-js');
-const fs = require('fs');
 
-function makeMidiTrack(teoriaNotes) {
-  //inits track
-  var track = new MidiWriter.Track();
+function addChord(track, teoriaNotes) {
   track.addEvent(new MidiWriter.NoteEvent({
-    pitch: teoriaNotes[0].scientific(),
+    pitch: teoriaNotes.map(x => x.scientific()),
     duration: '1'
-  }));
-
-  for (var note in teoriaNotes) { //adds each note from 1
-    var tempTrack = new MidiWriter.Track();
-    tempTrack.addEvent(new MidiWriter.NoteEvent({
-      pitch: teoriaNotes[note].scientific(),
-      duration: '1'
-    }))
-
-    track.mergeTrack(tempTrack);
-  }
+  }))
   return track;
 }
 
@@ -44,7 +31,8 @@ module.exports = {
     const chordNoteNames = chord.simple()
 
     if (args.includes('-midi')) { //write Midi
-      var chordTrack = makeMidiTrack(chordNotes);
+      var track = new MidiWriter.Track();
+      var chordTrack = addChord(track, chordNotes);
       var writer = new MidiWriter.Writer(chordTrack);
       writer.saveMIDI(chordName);
       var hasMidi = true;

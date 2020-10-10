@@ -3,14 +3,12 @@ const {capArray, capitalize, sendAndDelete} = require('../lib/musicFormatting');
 const Fuse = require('fuse.js');
 const usageText = require('./usage.json').scale;
 const MidiWriter = require('midi-writer-js');
-const fs = require('fs');
 
 
 const scales = ['major', 'minor', 'ionian', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'locrian', 'pentatonic', 'chromatic', 'blues', 'harmonicminor', 'melodicminor', 'wholetone']
 const fuseScales = new Fuse(scales, {includeScore: true});
 
-function makeMidiTrack(teoriaNotes) {
-  var track = new MidiWriter.Track();
+function addNotes(track, teoriaNotes) {
   for (var note in teoriaNotes){ //converts teoria note to scientific. then adds note event to track
     var midiNote = teoriaNotes[note].scientific();
     track.addEvent(new MidiWriter.NoteEvent({
@@ -59,19 +57,22 @@ module.exports = {
       console.log(error);
       return message.reply(`${note}は根音になれません`);
     }
-    const scaleNotes = scaleKeyNote.scale(mode);
+    
+    const scale = scaleKeyNote.scale(mode);
+    const scaleNotes = scale.notes()
     const scaleName = `${note.toUpperCase()}_${capitalize(mode)}`;
 
     //midi option
     if (args.includes('-midi')) {
-      var scaleMidi = makeMidiTrack(scaleNotes.notes());
+      var track = new MidiWriter.Track();
+      var scaleMidi = addNotes(track, scaleNotes);
       var writer = new MidiWriter.Writer(scaleMidi)
       writer.saveMIDI(scaleName);
       var hasMidi = true;
     }
 
 
-    message.channel.send(`${scaleName}: ${capArray(scaleNotes.simple())}`);
+    message.channel.send(`${scaleName}: ${capArray(scale.simple())}`);
     if (hasMidi) sendAndDelete(message, `${scaleName}.mid`);
   }
 }
