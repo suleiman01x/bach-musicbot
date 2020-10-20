@@ -87,12 +87,12 @@ module.exports = {
 
     //midi
     if (options['midi'].enabled) {
-      var track = new MidiWriter.Track();
+      let track = new MidiWriter.Track();
       try {
         const writer = new MidiWriter.Writer(addNotes(track, scaleNotes))
         writer.saveMIDI(scaleName);
       } catch(error) {
-        console.log('WTF HAPPENED');
+        console.log('WTF HAPPENED TO SCALEEE');
         options['midi'].enabled = false;
       }
     }

@@ -3,6 +3,13 @@ const teoria = require('teoria');
 const {capArray, sendAndDelete} = require('../lib/musicFormatting');
 const MidiWriter = require('midi-writer-js');
 
+const options = {
+  midi: {
+    name: '-midi',
+    argNums: 0
+  }
+}
+
 function addChord(track, teoriaNotes) {
   track.addEvent(new MidiWriter.NoteEvent({
     pitch: teoriaNotes.map(x => x.scientific()),
@@ -18,6 +25,17 @@ module.exports = {
     if (args.length === 0 || args.includes('-help')) {
       return message.reply(usageText);
     }
+    //parses for options
+    for (var optNum in options) {
+      let optName = options[optNum]
+      if (args.includes(optName.name)) {
+        let indexNum = args.indexOf(optName.name);
+        optName.enabled = true;
+        //inserts arguments in to optName.args
+        optName.args = args.splice(indexNum, optName.argNums + 1);
+        optName.args.shift();
+      }
+    }
 
     try { //test for errors in making a chord object
       var chord = teoria.chord(args[0]);
@@ -30,17 +48,20 @@ module.exports = {
     const chordNotes = chord.notes()
     const chordNoteNames = chord.simple()
 
-    if (args.includes('-midi')) { //write Midi
-      var track = new MidiWriter.Track();
-      var chordTrack = addChord(track, chordNotes);
-      var writer = new MidiWriter.Writer(chordTrack);
-      writer.saveMIDI(chordName);
-      var hasMidi = true;
+    if (options['midi'].enabled) { //write Midi
+      let track = new MidiWriter.Track();
+      try {
+        const writer = new MidiWriter.Writer(addChord(track, chordNotes));
+        writer.saveMIDI(chordName);
+      } catch(error) {
+        console.log('SOMETHING HAPPENED TO CHORD!!!')
+        options['midi'].enabled = false;
+      }
     }
 
 
     message.channel.send(`${chordName}の音: ${capArray(chordNoteNames)}`);
     //send Midi file
-    if (hasMidi) sendAndDelete(message, `${chordName}.mid`);
+    if (options['midi'].enabled) sendAndDelete(message, `${chordName}.mid`);
   }
 }
