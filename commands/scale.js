@@ -10,13 +10,21 @@ const fuseScales = new Fuse(scales, {includeScore: true});
 const options = {
     mode: {
       name: '-mode',
-      argNums: 1
+      argNums: 1,
+      enabled: false
     },
     midi: {
       name: '-midi',
-      argNums: 0
+      argNums: 0,
+      enabled: false
     }
   }
+
+function initOptions() {
+  for(let opt in options) {
+    options[opt].enabled = false;
+  }
+}
 
 function addNotes(track, teoriaNotes) {
   for (var note in teoriaNotes){ //converts teoria note to scientific. then adds note event to track
@@ -34,6 +42,7 @@ module.exports = {
   name: 'scale',
   description: '音階の情報を表示する',
   execute(message, args){
+    initOptions()
     if (args.length === 0 || args.includes('-help')) { //sends usage message
       message.channel.send(usageText);
       return;

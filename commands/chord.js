@@ -6,7 +6,14 @@ const MidiWriter = require('midi-writer-js');
 const options = {
   midi: {
     name: '-midi',
-    argNums: 0
+    argNums: 0,
+    enabled: false
+  }
+}
+
+function initOptions() {
+  for(let opt in options) {
+    options[opt].enabled = false;
   }
 }
 
@@ -34,6 +41,7 @@ module.exports = {
   name: 'chord',
   description: 'コード名からそのコードの情報を表示する',
   execute(message, args) {
+    initOptions();
     if (args.length === 0 || args.includes('-help')) {
       return message.reply(usageText);
     }
@@ -48,7 +56,6 @@ module.exports = {
         optName.args.shift();
       }
     }
-    console.log(args)
     var chords = new Array();
     for (var userChord in args) {
       try { //test for errors in making a chord object
@@ -62,8 +69,6 @@ module.exports = {
     const chordNames = chords.map(chord => chord.name)
     const chordNotes = chords.map(chord => chord.notes().map(note => note.scientific()))
     const chordNoteNames = chords.map(chord => chord.simple())
-    console.log(chordNames)
-    console.log(chordNotes)
 
     if (options['midi'].enabled) { //write Midi
       let track = new MidiWriter.Track();
