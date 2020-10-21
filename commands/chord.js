@@ -10,11 +10,23 @@ const options = {
   }
 }
 
-function addChord(track, teoriaNotes) {
-  track.addEvent(new MidiWriter.NoteEvent({
-    pitch: teoriaNotes.map(x => x.scientific()),
-    duration: '1'
-  }))
+function chordMessage(chordArray, chordNotes) {
+  var message = ''
+  for (let chord in chordArray) {
+    message += `${chordArray[chord]}の音：${capArray(chordNotes[chord])}\n`
+  }
+  return message
+}
+
+function addChord(track, noteArray) {
+  let noteEvents = new Array()
+  for(let noteGroup in noteArray) {
+    noteEvents.push(new MidiWriter.NoteEvent({
+      pitch: noteArray[noteGroup],
+      duration: '1'
+    }));
+  }
+  track.addEvent(noteEvents);
   return track;
 }
 
@@ -36,32 +48,36 @@ module.exports = {
         optName.args.shift();
       }
     }
-
-    try { //test for errors in making a chord object
-      var chord = teoria.chord(args[0]);
-    } catch (error) {
-      return message.reply(`${args[0]}はコードと認識されません`);
+    console.log(args)
+    var chords = new Array();
+    for (var userChord in args) {
+      try { //test for errors in making a chord object
+        chords.push(teoria.chord(args[userChord]));
+      } catch (error) {
+        return message.reply(`${args[userChord]}はコードと認識されません`);
+      }
     }
 
-    // declare parsed chord
-    const chordName = chord.name;
-    const chordNotes = chord.notes()
-    const chordNoteNames = chord.simple()
+    // declare parsed chord             
+    const chordNames = chords.map(chord => chord.name)
+    const chordNotes = chords.map(chord => chord.notes().map(note => note.scientific()))
+    const chordNoteNames = chords.map(chord => chord.simple())
+    console.log(chordNames)
+    console.log(chordNotes)
 
     if (options['midi'].enabled) { //write Midi
       let track = new MidiWriter.Track();
       try {
         const writer = new MidiWriter.Writer(addChord(track, chordNotes));
-        writer.saveMIDI(chordName);
+        writer.saveMIDI(chordNames[0]);
       } catch(error) {
         console.log('SOMETHING HAPPENED TO CHORD!!!')
         options['midi'].enabled = false;
       }
     }
 
-
-    message.channel.send(`${chordName}の音: ${capArray(chordNoteNames)}`);
+    message.channel.send(chordMessage(chordNames, chordNoteNames));
     //send Midi file
-    if (options['midi'].enabled) sendAndDelete(message, `${chordName}.mid`);
+    if (options['midi'].enabled) sendAndDelete(message, `${chordNames[0]}.mid`);
   }
 }
