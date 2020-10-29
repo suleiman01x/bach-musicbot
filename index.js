@@ -24,6 +24,7 @@ client.on('message', message => {
   var userCommand = args.shift().toLowerCase();
 
   if (!client.commands.has(userCommand)) {
+    console.log(Date.now(), message.content);
     message.reply(`${userCommand}はコマンドとして認識されていません\n助けが必要な場合${prefix}helpを使用して下さい`);
     return
   }
