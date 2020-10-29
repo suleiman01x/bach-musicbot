@@ -17,14 +17,13 @@ client.on('ready', () => {
 
 client.on('message', message => {
   if (!message.content.startsWith(prefix)) return
-
+  console.log(new Date(), message.content);
   //change flat to 'b'. maybe work on a better way
   var userInput = message.content.replace(/♭/g, 'b');
   var args = userInput.slice(prefix.length).trim().split(/ +/);
   var userCommand = args.shift().toLowerCase();
 
   if (!client.commands.has(userCommand)) {
-    console.log(Date.now(), message.content);
     message.reply(`${userCommand}はコマンドとして認識されていません\n助けが必要な場合${prefix}helpを使用して下さい`);
     return
   }
